@@ -1,5 +1,5 @@
 /**
- * vue-tabpanel v0.1.0
+ * vue-tabpanel v1.0.2
  * (c) 2017 ALEXQDJAY
  * mail: alexqdjay@126.com
  * @license Apache2
@@ -10,21 +10,21 @@
     (global.VueTaber = factory());
 }(this, (function () { 'use strict';
 
-function isFunction (fn) {
+function isFunction(fn) {
     if (!fn) {
         return false
     }
     return typeof fn === 'function'
 }
 
-function isString (str) {
+function isString(str) {
     if (!str) {
         return false
     }
     return typeof str === 'string'
 }
 
-function isObject (obj) {
+function isObject(obj) {
     if (!obj) {
         return false
     }
@@ -32,13 +32,13 @@ function isObject (obj) {
 }
 
 var store = {
-    save: function save (key, value) {
+    save: function save(key, value) {
         if (!key || !value) {
             return
         }
         window.localStorage[key] = JSON.stringify(value);
     },
-    get: function get (key) {
+    get: function get(key) {
         var value = window.localStorage[key];
         if (!value) {
             return null
@@ -52,10 +52,15 @@ var consts = {
 };
 
 var Tab = {
-render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('li',{class:{'active': _vm.tabData.active, 'loading': _vm.tabData.loading}},[_vm._v(_vm._s(_vm.tabData.params.title)),_c('span',{staticClass:"btn-close",on:{"click":function($event){$event.stopPropagation();_vm.close($event);}}},[_vm._v("×")])])},
+render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('li',{class:{'active': _vm.tabData.active, 'loading': _vm.tabData.loading}},[_vm._v("\n  "+_vm._s(_vm.tabData.params.title)),(_vm.tabData.allowClose)?_c('span',{staticClass:"btn-close",on:{"click":function($event){$event.stopPropagation();_vm.close($event);}}},[_vm._v("×")]):_vm._e()])},
 staticRenderFns: [],
         props: {
             tabData: Object
+        },
+        mounted: function mounted() {
+            if (this.tabData.allowClose === undefined) {
+                this.tabData.allowClose = true;
+            }
         },
         methods: {
             close: function close() {
@@ -64,238 +69,241 @@ staticRenderFns: [],
         }
     };
 
-function tabIdGen (tabName, tabKey) {
-    if ( tabKey === void 0 ) tabKey = '';
+function tabIdGen(tabName, tabKey) {
+        if ( tabKey === void 0 ) tabKey = '';
 
-    if (isObject(tabName)) {
-        var name = tabName.name;
-        var key = tabName.key; if ( key === void 0 ) key = '';
-        return (name + "/" + key)
+        if (isObject(tabName)) {
+            var name = tabName.name;
+            var key = tabName.key; if ( key === void 0 ) key = '';
+            return (name + "/" + key)
+        }
+        return (tabName + "/" + tabKey)
     }
-    return (tabName + "/" + tabKey)
-}
-var EVENT_ACTIVE_CHANGE = 'vue-tabpanel-active-change';
-var EVENT_CLOSE = 'vue-tabpanel-close';
-var cached = {};
-var TabsView = {
+    var EVENT_ACTIVE_CHANGE = 'vue-tabpanel-active-change';
+    var EVENT_CLOSE = 'vue-tabpanel-close';
+    var cached = {};
+    var TabsView = {
 render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"vue-tabpanel"},[_c('div',{staticClass:"tabs-list-wrapper"},[_c('ul',{staticClass:"tabs-list"},_vm._l((_vm.tabs),function(tab){return _c('tab',{attrs:{"tab-data":tab},on:{"close":function($event){_vm.close(tab);}},nativeOn:{"click":function($event){_vm.clickTab(tab);}}})}))]),_vm._v(" "),_c('div',{ref:"contentWrapEl",staticClass:"tabs-content-wrapper"})])},
 staticRenderFns: [],
-    components: {Tab: Tab},
-    data: function data () {
-        return {
-            tabs: [],
-            active: null
-        }
-    },
-    beforeCreate: function beforeCreate () {
-        this.tabSize = 0;
-        this.tabMap = {};
-    },
-    created: function created () {
-        this.$taber.vm = this;
-    },
-    mounted: function mounted () {
-        this.$taber.mounted();
-    },
-    methods: {
-        appendContent: function appendContent (tab) {
-            var Component = cached[tab.name];
-            var _this = this;
-            var promise;
-            if (!Component) {
-                if (isFunction(tab.meta.component)) {
-                    var asyncFn = tab.meta.component;
-                    this.$set(tab, 'loading', true);
-                    promise = new Promise(asyncFn).then(function (Component) {
-                        return (cached[tab.name] = _this.getVue().extend(Component))
-                    });
-                } else {
-                    promise = Promise.resolve(tab.meta.component).then(function (Component) {
-                        return (cached[tab.name] = _this.getVue().extend(Component))
-                    });
-                }
-            } else {
-                promise = Promise.resolve(Component);
+        components: {
+            Tab: Tab
+        },
+        data: function data() {
+            return {
+                tabs: [],
+                active: null
             }
+        },
+        beforeCreate: function beforeCreate() {
+            this.tabSize = 0;
+            this.tabMap = {};
+        },
+        created: function created() {
+            this.$taber.vm = this;
+        },
+        mounted: function mounted() {
+            this.$taber.mounted();
+        },
+        methods: {
+            appendContent: function appendContent(tab) {
+                var Component = cached[tab.name];
+                var _this = this;
+                var promise;
+                if (!Component) {
+                    if (isFunction(tab.meta.component)) {
+                        var asyncFn = tab.meta.component;
+                        this.$set(tab, 'loading', true);
+                        promise = new Promise(asyncFn).then(function (Component) {
+                            return (cached[tab.name] = _this.getVue().extend(Component))
+                        });
+                    } else {
+                        promise = Promise.resolve(tab.meta.component).then(function (Component) {
+                            return (cached[tab.name] = _this.getVue().extend(Component))
+                        });
+                    }
+                } else {
+                    promise = Promise.resolve(Component);
+                }
 
-            promise.then(function (Component) {
-                newInstance(Component);
-            });
-
-            return promise
-
-            function newInstance (Component) {
-                var $el = document.createElement('div');
-                _this.$refs.contentWrapEl.appendChild($el);
-                var instance = new Component({
-                    el: $el,
-                    __taber: _this.$taber,
-                    parent: _this,
-                    $tab: tab
+                promise.then(function (Component) {
+                    newInstance(Component);
                 });
 
-                tab.content = instance;
-                instance.$el.classList.add('tabs-content');
-            }
-        },
-        clickTab: function clickTab (tab) {
-            if (tab && !tab.active) {
-                this.select(tab);
-            }
-        },
-        close: function close (tab) {
-            if (!tab) {
-                return
-            }
+                return promise
 
-            var hooks = [].concat( this.$taber.beforeCloseHooks );
-            if (tab.meta.beforeClose && isFunction(tab.meta.beforeClose)) {
-                hooks.push(tab.meta.beforeClose);
-            }
-            hooks.push(_close);
-            var i = 0;
-            var _this = this;
-            function next (target) {
-                if (target == null) {
-                    hooks[++i].call(_this, tab, next);
-                } else if (target === false) {
+                function newInstance(Component) {
+                    var $el = document.createElement('div');
+                    _this.$refs.contentWrapEl.appendChild($el);
+                    var instance = new Component({
+                        el: $el,
+                        __taber: _this.$taber,
+                        parent: _this,
+                        $tab: tab
+                    });
+
+                    tab.content = instance;
+                    instance.$el.classList.add('tabs-content');
+                }
+            },
+            clickTab: function clickTab(tab) {
+                if (tab && !tab.active) {
+                    this.select(tab);
+                }
+            },
+            close: function close(tab) {
+                if (!tab) {
                     return
                 }
-            }
-            hooks[0].call(_this, tab, next);
 
-            function _close () {
-                tab.content.$destroy();
-                tab.content.$el.remove();
-                this.tabMap[tabIdGen(tab)] = null;
-                var index = this.tabs.indexOf(tab);
-                if (index === -1) {
-                    return
+                var hooks = [].concat( this.$taber.beforeCloseHooks );
+                if (tab.meta.beforeClose && isFunction(tab.meta.beforeClose)) {
+                    hooks.push(tab.meta.beforeClose);
                 }
-                this.tabs.splice(index, 1);
+                hooks.push(_close);
+                var i = 0;
+                var _this = this;
 
-                if (this.tabs.length > 0 && this.active === tab) {
-                    if (index < this.tabs.length) {
-                        this.select(this.tabs[index]);
-                    } else {
-                        this.select(this.tabs[this.tabs.length - 1]);
-                    }
-                } else if (this.tabs.length === 0) {
-                    this.$emit(EVENT_ACTIVE_CHANGE, null, tab);
-                    this._saveTabs();
-                }
-                this.$emit(EVENT_CLOSE, tab);
-            }
-        },
-        create: function create (tab) {
-            var this$1 = this;
-
-            var hooks = [].concat( this.$taber.beforeCreateHooks );
-            if (tab.meta.beforeCreate && isFunction(tab.meta.beforeCreate)) {
-                hooks.push(tab.meta.beforeCreate);
-            }
-
-            var i = 0;
-            var _this = this;
-            var next = function (target) {
-                if (target == null) {
-                    hooks[++i].call(_this, tab, next);
-                } else if (target === false) {
-                    return
-                } else {
-                    if (isString(target) && target === tab.name) {
+                function next(target) {
+                    if (target == null) {
                         hooks[++i].call(_this, tab, next);
-                    } else if (isObject(target) && target.name === tab.name) {
-                        hooks[++i].call(_this, tab, next);
-                    } else {
-                        _this.$taber.open(target);
+                    } else if (target === false) {
+                        return
                     }
                 }
-            };
-            hooks.push(function () {
-                this$1.tabs.push(tab);
-                var p = this$1.appendContent(tab).then(function () {
-                    this$1.$set(tab, 'loading', false);
+                hooks[0].call(_this, tab, next);
+
+                function _close() {
+                    tab.content.$destroy();
+                    tab.content.$el.remove();
+                    this.tabMap[tabIdGen(tab)] = null;
+                    var index = this.tabs.indexOf(tab);
+                    if (index === -1) {
+                        return
+                    }
+                    this.tabs.splice(index, 1);
+
+                    if (this.tabs.length > 0 && this.active === tab) {
+                        if (index < this.tabs.length) {
+                            this.select(this.tabs[index]);
+                        } else {
+                            this.select(this.tabs[this.tabs.length - 1]);
+                        }
+                    } else if (this.tabs.length === 0) {
+                        this.$emit(EVENT_ACTIVE_CHANGE, null, tab);
+                        this._saveTabs();
+                    }
+                    this.$emit(EVENT_CLOSE, tab);
+                }
+            },
+            create: function create(tab) {
+                var this$1 = this;
+
+                var hooks = [].concat( this.$taber.beforeCreateHooks );
+                if (tab.meta.beforeCreate && isFunction(tab.meta.beforeCreate)) {
+                    hooks.push(tab.meta.beforeCreate);
+                }
+
+                var i = 0;
+                var _this = this;
+                var next = function(target) {
+                    if (target == null) {
+                        hooks[++i].call(_this, tab, next);
+                    } else if (target === false) {
+                        return
+                    } else {
+                        if (isString(target) && target === tab.name) {
+                            hooks[++i].call(_this, tab, next);
+                        } else if (isObject(target) && target.name === tab.name) {
+                            hooks[++i].call(_this, tab, next);
+                        } else {
+                            _this.$taber.open(target);
+                        }
+                    }
+                };
+                hooks.push(function () {
+                    this$1.tabs.push(tab);
+                    var p = this$1.appendContent(tab).then(function () {
+                        this$1.$set(tab, 'loading', false);
+                    });
+                    tab.promise = p;
+                    if (tab.active !== false) {
+                        this$1.select(tab);
+                    } else {
+                        this$1._saveTabs();
+                    }
+                    var id = tabIdGen(tab.name, tab.key);
+                    this$1.tabMap[id] = tab;
+
+                    next = null;
+                    hooks = null;
                 });
-                tab.promise = p;
-                if (tab.active !== false) {
-                    this$1.select(tab);
-                } else {
-                    this$1._saveTabs();
+
+                hooks[0].call(this, tab, next);
+            },
+            findOpenTab: function findOpenTab(name, key) {
+                var id = tabIdGen(name, key);
+                return this.tabMap[id]
+            },
+            select: function select(tab) {
+                var this$1 = this;
+
+                if (!tab) {
+                    return
                 }
-                var id = tabIdGen(tab.name, tab.key);
-                this$1.tabMap[id] = tab;
-
-                next = null;
-                hooks = null;
-            });
-
-            hooks[0].call(this, tab, next);
-        },
-        findOpenTab: function findOpenTab (name, key) {
-            var id = tabIdGen(name, key);
-            return this.tabMap[id]
-        },
-        select: function select (tab) {
-            var this$1 = this;
-
-            if (!tab) {
-                return
-            }
-            this.$set(tab, 'active', true);
-            this.$emit(EVENT_ACTIVE_CHANGE, tab, this.active);
-            this.active = tab;
-            this.tabs.forEach(function (ftab) {
-                if (tabIdGen(ftab.name, ftab.key) !== tabIdGen(tab.name, tab.key)) {
-                    this$1.$set(ftab, 'active', false);
-                    if (ftab.content && ftab.content.$el) {
-                        ftab.content.$el.classList.remove('active');
+                this.$set(tab, 'active', true);
+                this.$emit(EVENT_ACTIVE_CHANGE, tab, this.active);
+                this.active = tab;
+                this.tabs.forEach(function (ftab) {
+                    if (tabIdGen(ftab.name, ftab.key) !== tabIdGen(tab.name, tab.key)) {
+                        this$1.$set(ftab, 'active', false);
+                        if (ftab.content && ftab.content.$el) {
+                            ftab.content.$el.classList.remove('active');
+                        }
                     }
+                });
+                this._saveTabs();
+                var promise = tab.promise;
+                if (!promise) {
+                    promise = Promise.resolve();
                 }
-            });
-            this._saveTabs();
-            var promise = tab.promise;
-            if (!promise) {
-                promise = Promise.resolve();
+                promise.then(function () {
+                    if (tab.active && tab.content) {
+                        tab.content.$el.classList.add('active');
+                        tab.promise = null;
+                    }
+                });
+            },
+            _saveTabs: function _saveTabs() {
+                if (!this.$taber.persist) {
+                    return
+                }
+                var toSave = this.tabs.map(function (v) {
+                    return {
+                        name: v.name,
+                        key: v.key,
+                        params: v.params,
+                        active: v.active
+                    }
+                });
+                store.save(consts.STORE_KEY, toSave);
             }
-            promise.then(function () {
-                if (tab.active && tab.content) {
-                    tab.content.$el.classList.add('active');
-                    tab.promise = null;
-                }
-            });
-        },
-        _saveTabs: function _saveTabs () {
-            if (!this.$taber.persist) {
-                return
-            }
-            var toSave = this.tabs.map(function (v) {
-                return {
-                    name: v.name,
-                    key: v.key,
-                    params: v.params,
-                    active: v.active
-                }
-            });
-            store.save(consts.STORE_KEY, toSave);
         }
-    }
-};
+    };
 
-function install (Vue) {
+function install(Vue) {
     if (install.installed) {
         return
     }
     install.installed = true;
 
     Object.defineProperty(Vue.prototype, '$taber', {
-        get: function get () {
+        get: function get() {
             return this.$root._taber
         }
     });
 
     Object.defineProperty(Vue.prototype, '$tab', {
-        get: function get$1 () {
+        get: function get$1() {
             return this.$options.$tab
         }
     });
@@ -304,7 +312,7 @@ function install (Vue) {
     Vue.component('VueTabpanel', TabsView);
 
     Vue.mixin({
-        beforeCreate: function beforeCreate () {
+        beforeCreate: function beforeCreate() {
             if (this.$options.taber) {
                 this._taber = this.$options.taber;
             } else if (this.$options.__taber) {
@@ -315,7 +323,7 @@ function install (Vue) {
 }
 
 var allEvents = ['vue-tabpanel-close', 'vue-tabpanel-active-change'];
-var VueTaber$1 = function VueTaber$1 (options) {
+var VueTaber$1 = function VueTaber$1(options) {
     var this$1 = this;
 
     var ops_tabs = options.tabs;
@@ -349,7 +357,7 @@ VueTaber$1.prototype.findTab = function findTab (tab) {
 
 VueTaber$1.prototype.open = function open (tab) {
     if (isString(tab)) {
-        tab = {name: tab};
+        tab = { name: tab };
     }
     var meta = this.findTab(tab);
     if (!meta) {
@@ -367,7 +375,7 @@ VueTaber$1.prototype.open = function open (tab) {
 
 VueTaber$1.prototype.close = function close (tab) {
     if (isString(tab)) {
-        tab = {name: tab};
+        tab = { name: tab };
     }
     var meta = this.findTab(tab);
     if (!meta) {
@@ -381,7 +389,7 @@ VueTaber$1.prototype.close = function close (tab) {
 
 VueTaber$1.prototype.select = function select (tab) {
     if (isString(tab)) {
-        tab = {name: tab};
+        tab = { name: tab };
     }
     var findedTab = this.vm.findOpenTab(tab.name, tab.key);
     this.vm.select(findedTab);
@@ -442,11 +450,11 @@ VueTaber$1.prototype._restoreTabs = function _restoreTabs () {
     });
 };
 
-    VueTaber$1.prototype.mounted = function mounted () {
+VueTaber$1.prototype.mounted = function mounted () {
     this._restoreTabs();
     };
 
-prototypeAccessors.vm.set = function (vm) {
+    prototypeAccessors.vm.set = function (vm) {
         var this$1 = this;
 
     this._vm = vm;
