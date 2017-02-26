@@ -2,6 +2,10 @@
     "name": "vue-tabpanel",
     "version": "1.0.2",
     "description": "A Vue.js tabs framework which modified base on <a href='https://github.com/alexqdjay/vue-tabs'>vue-tabs</a>.",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/lampo1024/vue-tabpanel"
+    },
     "author": "Rector",
     "main": "vue-tabpanel.js",
     "scripts": {
