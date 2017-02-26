@@ -21,50 +21,51 @@
 </template>
 
 <script>
-function onActiveChange () {
-    console.log('on active change')
-}
-export default {
-    name: 'hello',
-    data () {
-        return {
-            msg: 'Welcome to Your Vue.js App'
-        }
-    },
-    beforeCreate () {
-        console.log('1', this.$tab.params, this.$taber)
-        this.$taber.$on('vue-tabpanel-active-change', onActiveChange)
-    },
-    beforeDestroy () {
-        console.log('hello destroy')
-        this.$taber.$off('vue-tabpanel-active-change', onActiveChange)
-    },
-    created () {
-        console.log('2', this.$tab, this.$taber)
-    },
-    mounted () {
-        console.log('3', this.$tab, this.$taber)
+    function onActiveChange() {
+        console.log('on active change')
     }
-}
+    export default {
+        name: 'hello',
+        data() {
+            return {
+                msg: 'Welcome to Your Vue.js App'
+            }
+        },
+        beforeCreate() {
+            console.log('1', this.$tab.params, this.$taber)
+            this.$taber.$on('vue-tabpanel-active-change', onActiveChange)
+        },
+        beforeDestroy() {
+            console.log('hello destroy')
+            this.$taber.$off('vue-tabpanel-active-change', onActiveChange)
+        },
+        created() {
+            console.log('2', this.$tab, this.$taber)
+        },
+        mounted() {
+            console.log('3', this.$tab, this.$taber)
+        }
+    }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
-  font-weight: normal;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
-}
+    h1,
+    h2 {
+        font-weight: normal;
+    }
+    
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+    
+    li {
+        display: inline-block;
+        margin: 0 10px;
+    }
+    
+    a {
+        color: #42b983;
+    }
 </style>

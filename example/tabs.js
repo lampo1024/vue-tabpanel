@@ -4,11 +4,11 @@ export default [{
     name: 'home',
     title: '首页',
     component: Hello,
-    beforeCreate (tab, next) {
+    beforeCreate(tab, next) {
         console.log('before create:', tab)
         next()
     },
-    beforeClose (tab, next) {
+    beforeClose(tab, next) {
         console.log('before close', tab)
         next()
     }
@@ -18,7 +18,7 @@ export default [{
     component: {
         template: '<h2>测试1</h2>'
     },
-    beforeCreate (tab, next) {
+    beforeCreate(tab, next) {
         console.log('before create:', tab)
         next()
     }

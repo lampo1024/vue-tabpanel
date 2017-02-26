@@ -1,10 +1,10 @@
-import {isString, isFunction, store, consts} from './utils'
+import { isString, isFunction, store, consts } from './utils'
 import install from './install'
 
 const allEvents = ['vue-tabpanel-close', 'vue-tabpanel-active-change']
 export default class VueTaber {
-    constructor (options) {
-        const {tabs: ops_tabs, persist} = options
+    constructor(options) {
+        const { tabs: ops_tabs, persist } = options
         this._tabsMap = {}
         ops_tabs.forEach((tab) => {
             this._tabsMap[tab.name] = tab
@@ -17,7 +17,7 @@ export default class VueTaber {
         this.persist = persist
     }
 
-    findTab (tab) {
+    findTab(tab) {
         if (!tab) {
             return null
         }
@@ -30,9 +30,9 @@ export default class VueTaber {
         return this._tabsMap[name]
     }
 
-    open (tab) {
+    open(tab) {
         if (isString(tab)) {
-            tab = {name: tab}
+            tab = { name: tab }
         }
         let meta = this.findTab(tab)
         if (!meta) {
@@ -48,9 +48,9 @@ export default class VueTaber {
         }
     }
 
-    close (tab) {
+    close(tab) {
         if (isString(tab)) {
-            tab = {name: tab}
+            tab = { name: tab }
         }
         let meta = this.findTab(tab)
         if (!meta) {
@@ -62,15 +62,15 @@ export default class VueTaber {
         this.vm.close(findedTab)
     }
 
-    select (tab) {
+    select(tab) {
         if (isString(tab)) {
-            tab = {name: tab}
+            tab = { name: tab }
         }
         const findedTab = this.vm.findOpenTab(tab.name, tab.key)
         this.vm.select(findedTab)
     }
 
-    $on (event, call) {
+    $on(event, call) {
         if (!event || !isFunction(call)) {
             console.error('$on error event:[' + event + '], call:' + call)
             return
@@ -81,7 +81,7 @@ export default class VueTaber {
         this._events[event].push(call)
     }
 
-    $off (event, call) {
+    $off(event, call) {
         if (!event) {
             return
         }
@@ -96,21 +96,21 @@ export default class VueTaber {
         }
     }
 
-    beforeCreateEach (fn) {
+    beforeCreateEach(fn) {
         if (!isFunction(fn)) {
             return
         }
         this.beforeCreateHooks.push(fn)
     }
 
-    beforeCloseEach (fn) {
+    beforeCloseEach(fn) {
         if (!isFunction(fn)) {
             return
         }
         this.beforeCloseHooks.push(fn)
     }
 
-    _restoreTabs () {
+    _restoreTabs() {
         if (!this.persist) {
             return
         }
@@ -123,11 +123,11 @@ export default class VueTaber {
         })
     }
 
-    mounted () {
+    mounted() {
         this._restoreTabs()
     }
 
-    set vm (vm) {
+    set vm(vm) {
         this._vm = vm
         const _this = this
         allEvents.forEach((event) => {
@@ -140,7 +140,7 @@ export default class VueTaber {
         })
     }
 
-    get vm () {
+    get vm() {
         return this._vm
     }
 }

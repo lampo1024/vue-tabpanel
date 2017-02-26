@@ -1,18 +1,18 @@
-export function isFunction (fn) {
+export function isFunction(fn) {
     if (!fn) {
         return false
     }
     return typeof fn === 'function'
 }
 
-export function isString (str) {
+export function isString(str) {
     if (!str) {
         return false
     }
     return typeof str === 'string'
 }
 
-export function isObject (obj) {
+export function isObject(obj) {
     if (!obj) {
         return false
     }
@@ -20,13 +20,13 @@ export function isObject (obj) {
 }
 
 export const store = {
-    save (key, value) {
+    save(key, value) {
         if (!key || !value) {
             return
         }
         window.localStorage[key] = JSON.stringify(value)
     },
-    get (key) {
+    get(key) {
         let value = window.localStorage[key]
         if (!value) {
             return null
