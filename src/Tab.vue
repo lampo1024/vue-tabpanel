@@ -1,14 +1,16 @@
 <template>
 <li :class="{'active': tabData.active, 'loading': tabData.loading}">
-  {{tabData.params.title}}<span v-if="tabData.allowClose || tabData.params.allowClose" class="btn-close" @click.stop="close">&times;</span></li>
+  {{tabData.params.title}}<span v-if="allowClose" class="btn-close" @click.stop="close">&times;</span></li>
 </template>
 <script>
     export default {
         props: {
             tabData: Object
         },
-        mounted() {
-            
+        computed: {
+            allowClose() {
+                return this.tabData.allowClose || this.tabData.allowClose === undefined;
+            }
         },
         methods: {
             close() {
