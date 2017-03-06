@@ -1,5 +1,5 @@
 /**
- * vue-tabpanel v1.1.0
+ * vue-tabpanel v1.2.0
  * (c) 2017 ALEXQDJAY
  * mail: alexqdjay@126.com
  * @license Apache2
@@ -52,15 +52,13 @@ var consts = {
 };
 
 var Tab = {
-render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('li',{class:{'active': _vm.tabData.active, 'loading': _vm.tabData.loading}},[_vm._v("\r\n  "+_vm._s(_vm.tabData.params.title)),(_vm.tabData.allowClose)?_c('span',{staticClass:"btn-close",on:{"click":function($event){$event.stopPropagation();_vm.close($event);}}},[_vm._v("×")]):_vm._e()])},
+render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('li',{class:{'active': _vm.tabData.active, 'loading': _vm.tabData.loading}},[_vm._v("\r\n  "+_vm._s(_vm.tabData.params.title)),(_vm.tabData.allowClose || _vm.tabData.params.allowClose)?_c('span',{staticClass:"btn-close",on:{"click":function($event){$event.stopPropagation();_vm.close($event);}}},[_vm._v("×")]):_vm._e()])},
 staticRenderFns: [],
         props: {
             tabData: Object
         },
         mounted: function mounted() {
-            if (this.tabData.allowClose === undefined) {
-                this.tabData.allowClose = true;
-            }
+            
         },
         methods: {
             close: function close() {
