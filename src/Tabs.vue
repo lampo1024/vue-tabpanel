@@ -1,4 +1,4 @@
-<template>
+﻿<template>
 <div class="vue-tabpanel">
     <div class="tabs-list-wrapper">
         <ul class="tabs-list">
