@@ -1,5 +1,5 @@
 /**
- * vue-tabpanel v1.3.0
+ * vue-tabpanel v1.4.0
  * (c) 2017 ALEXQDJAY
  * mail: alexqdjay@126.com
  * @license Apache2
@@ -332,7 +332,7 @@ var VueTaber$1 = function VueTaber$1(options) {
     ops_tabs.forEach(function (tab) {
         this$1._tabsMap[tab.name] = tab;
     });
-
+    console.info(this._tabsMap.length);
     this.beforeCreateHooks = [];
     this.beforeCloseHooks = [];
 
@@ -352,6 +352,7 @@ VueTaber$1.prototype.findTab = function findTab (tab) {
     } else {
         name = tab.name;
     }
+
     return this._tabsMap[name]
 };
 
@@ -409,7 +410,7 @@ VueTaber$1.prototype.$on = function $on (event, call) {
 VueTaber$1.prototype.$off = function $off (event, call) {
         if (!event) {
         return
-    }
+        }
     var listeners = this._events[event] || [];
     if (call) {
         var index = listeners.indexOf(call);
@@ -452,13 +453,13 @@ VueTaber$1.prototype._restoreTabs = function _restoreTabs () {
 
 VueTaber$1.prototype.mounted = function mounted () {
     this._restoreTabs();
-    };
+};
 
     prototypeAccessors.vm.set = function (vm) {
         var this$1 = this;
 
     this._vm = vm;
-    var _this = this;
+        var _this = this;
     allEvents.forEach(function (event) {
         vm.$on(event, function () {
                 var args = [], len = arguments.length;

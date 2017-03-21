@@ -9,12 +9,13 @@ export default class VueTaber {
         ops_tabs.forEach((tab) => {
             this._tabsMap[tab.name] = tab
         })
-
         this.beforeCreateHooks = []
         this.beforeCloseHooks = []
 
         this._events = {}
         this.persist = persist
+        this.count = 0;
+        this.openedTabs = [];
     }
 
     findTab(tab) {
@@ -36,7 +37,7 @@ export default class VueTaber {
         }
         let meta = this.findTab(tab)
         if (!meta) {
-            console.error(`The Tab [${tab.name}] is not defined!`)
+            console.error(`The Tab [$ {tab.name}] is not defined ! `)
             return
         }
         tab.meta = meta
@@ -46,6 +47,8 @@ export default class VueTaber {
         } else {
             this.vm.select(findedTab)
         }
+        this.count = this.vm.tabs.length;
+        this.openedTabs = this.vm.tabs;
     }
 
     close(tab) {
@@ -54,7 +57,7 @@ export default class VueTaber {
         }
         let meta = this.findTab(tab)
         if (!meta) {
-            console.error(`The Tab [${tab.name}] is not defined!`)
+            console.error(`The Tab [$ {tab.name}] is not defined ! `)
             return
         }
         tab.meta = meta

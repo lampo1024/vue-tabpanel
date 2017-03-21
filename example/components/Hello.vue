@@ -44,6 +44,7 @@
         },
         mounted() {
             console.log('3', this.$tab, this.$taber)
+            console.log('4', this.$taber.count, this.$taber.openedTabs)
         }
     }
 </script>
